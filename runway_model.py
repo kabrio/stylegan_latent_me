@@ -43,7 +43,6 @@ generate_inputs = {
 
 @runway.command('generat3', inputs=generate_inputs, outputs={'image': runway.image})
 def move_and_show(model, inputs):
-	generator = Generator(model, batch_size=1, randomize_noise=False)
 	coeff = inputs['age']
 	fig,ax = plt.subplots(1, 1, figsize=(15, 10), dpi=80)
 	# load latent representation
@@ -51,7 +50,7 @@ def move_and_show(model, inputs):
 	# Loading already learned latent directions
 	direction = np.load('ffhq_dataset/latent_directions/age.npy')     
 	# generator
-	# generator = Generator(model, batch_size=1, randomize_noise=False)
+	generator = Generator(model, batch_size=1, randomize_noise=False)
 	new_latent_vector = latent_vector.copy()
 	new_latent_vector[:8] = (latent_vector + coeff*direction)[:8]
 	ax.imshow(generate_image(generator, new_latent_vector))

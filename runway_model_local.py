@@ -30,11 +30,11 @@ def setup():
 
 
 def generate_image(generator, latent_vector):
-    latent_vector = latent_vector.reshape((1, 18, 512))
-    generator.set_dlatents(latent_vector)
-    img_array = generator.generate_images()[0]
-    img = PIL.Image.fromarray(img_array, 'RGB')
-    return img.resize((512, 512))   
+	latent_vector = latent_vector.reshape((1, 18, 512))
+	generator.set_dlatents(latent_vector)
+	img_array = generator.generate_images()[0]
+	img = PIL.Image.fromarray(img_array, 'RGB')
+	return img.resize((512, 512))   
 
 generate_inputs = {
 	'representation': runway.file(extension='.pkl'),
@@ -50,10 +50,10 @@ def move_and_show(model, inputs):
 	# Loading already learned latent directions
 	direction = np.load('ffhq_dataset/latent_directions/age.npy')     
 	# generator
+	generator = Generator(model, batch_size=1, randomize_noise=False)
 	# generator = Generator(model, batch_size=1, randomize_noise=False)
 	new_latent_vector = latent_vector.copy()
 	new_latent_vector[:8] = (latent_vector + coeff*direction)[:8]
-	generator = Generator(model, batch_size=1, randomize_noise=False)
 	ax.imshow(generate_image(generator, new_latent_vector))
 	ax.set_title('Coeff: %0.1f' % coeff)
 	[x.axis('off') for x in ax]
