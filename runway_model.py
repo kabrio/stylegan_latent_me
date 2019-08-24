@@ -37,7 +37,7 @@ def generate_image(generator, latent_vector):
 	return img.resize((512, 512))   
 
 generate_inputs = {
-	'representation': runway.file(extension='.pkl'),
+	'representation': runway.file(extension='.npy'),
 	'age': runway.number(min=-6, max=6, default=6, step=0.1)
 }
 
