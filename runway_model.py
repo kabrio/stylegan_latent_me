@@ -37,6 +37,7 @@ def generate_image(generator, latent_vector):
     return img.resize((512, 512))   
 
 generate_inputs = {
+	'representation': runway.file(extension='.pkl'),
 	'age': runway.number(min=-6, max=6, default=6, step=0.1)
 }
 
@@ -46,8 +47,7 @@ def move_and_show(model, inputs):
 	coeff = inputs['age']
 	fig,ax = plt.subplots(1, 1, figsize=(15, 10), dpi=80)
 	# load latent representation
-	r1 = 'latent_representations/j_01.npy'
-	latent_vector = np.load(r1)
+	latent_vector = np.load(inputs["representation"])
 	# Loading already learned latent directions
 	direction = np.load('ffhq_dataset/latent_directions/age.npy')     
 	# generator
