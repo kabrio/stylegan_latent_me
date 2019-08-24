@@ -30,11 +30,11 @@ def setup():
 
 
 def generate_image(generator, latent_vector):
-    latent_vector = latent_vector.reshape((1, 18, 512))
-    generator.set_dlatents(latent_vector)
-    img_array = generator.generate_images()[0]
-    img = PIL.Image.fromarray(img_array, 'RGB')
-    return img.resize((512, 512))   
+	latent_vector = latent_vector.reshape((1, 18, 512))
+	generator.set_dlatents(latent_vector)
+	img_array = generator.generate_images()[0]
+	img = PIL.Image.fromarray(img_array, 'RGB')
+	return img.resize((512, 512))   
 
 generate_inputs = {
 	'representation': runway.file(extension='.pkl'),
