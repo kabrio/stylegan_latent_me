@@ -13,20 +13,20 @@ import matplotlib.pyplot as plt
 import runway
 
 
-@runway.setup(options={'checkpoint': runway.file(extension='.npy')})
+@runway.setup(options={'people_vector': runway.file(extension='.npy'), 'checkpoint': runway.file(extension='.pkl')})
 def setup(opts):
 	# load latent representation
-	p1 = opts['checkpoint']
+	p1 = opts['people_vector']
 	latent_vector = np.load(p1)
 	tflib.init_tf()
-	model = 'checkpoints/karras2019stylegan-ffhq-1024x1024.pkl'
+	model = opts['checkpoint']
 	print("open model %s" % model)
 	with open(model, 'rb') as file:
 		G, D, Gs = pickle.load(file)
 	Gs.print_layers()
 	global generator
 	generator = Generator(Gs, batch_size=1, randomize_noise=False)
-	return generator
+	return Gs
 
 # def setup(opts):
 # 	tflib.init_tf()
@@ -65,7 +65,7 @@ def move_and_show(model, inputs):
 	coeff = inputs['age']
 	new_latent_vector = latent_vector.copy()
 	new_latent_vector[:8] = (latent_vector + coeff*direction)[:8]
-	image = (generate_image(model, new_latent_vector))
+	image = (generate_image(generator, new_latent_vector))
 	#ax[i].set_title('Coeff: %0.1f' % coeff)
 	#plt.show()
 	return {'image': image}
