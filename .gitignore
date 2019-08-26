@@ -1,2 +1,5 @@
 cache/
 runway_model_local.py
+*.pkl
+.DS_Store
+.DS_Store
