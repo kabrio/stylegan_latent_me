@@ -27,6 +27,7 @@ def setup():
 		# _D = Instantaneous snapshot of the discriminator. Mainly useful for resuming a previous training run.
 		# Gs = Long-term average of the generator. Yields higher-quality results than the instantaneous snapshot.
 	Gs.print_layers()
+	move_and_show(Gs)
 	return Gs
 
 
@@ -41,8 +42,12 @@ generate_inputs = {
 	'age': runway.number(min=-6, max=6, default=6, step=0.1)
 }
 
-@runway.command('generat3', inputs=generate_inputs, outputs={'image': runway.image})
-def move_and_show(model, inputs):
+generate_outputs = {
+	'image': runway.image
+}
+
+@runway.command('generat3', inputs=generate_inputs, outputs=generate_outputs)
+def move_and_show(model):
 	#coeff = inputs['age']
 	coeff = 5
 	fig,ax = plt.subplots(1, 1, figsize=(15, 10), dpi=80)
@@ -55,10 +60,7 @@ def move_and_show(model, inputs):
 	generator = Generator(model, batch_size=1, randomize_noise=False)
 	new_latent_vector = latent_vector.copy()
 	new_latent_vector[:8] = (latent_vector + coeff*direction)[:8]
-	ax.imshow(generate_image(generator, new_latent_vector))
-	ax.set_title('Coeff: %0.1f' % coeff)
-	[x.axis('off') for x in ax]
-	output = fig2data(plt)
+	image = generate_image(generator, new_latent_vector)
 	return {'image': output}
 
 if __name__ == '__main__':
