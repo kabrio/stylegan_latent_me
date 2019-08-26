@@ -13,8 +13,11 @@ import matplotlib.pyplot as plt
 import runway
 
 
-@runway.setup
+@runway.setup(options={'checkpoint': runway.file(extension='.npy')})
 def setup(opts):
+	# load latent representation
+	p1 = opts['checkpoint']
+	latent_vector = np.load(p1)
 	tflib.init_tf()
 	model = 'checkpoints/karras2019stylegan-ffhq-1024x1024.pkl'
 	print("open model %s" % model)
@@ -58,9 +61,6 @@ def move_and_show(model, inputs):
 	# load direction
 	age_direction = np.load('ffhq_dataset/latent_directions/age.npy')
 	direction = age_direction
-	# load latent representation
-	r1 = 'latent_representations/j_01.npy'
-	latent_vector = np.load(r1)
 	# generator
 	coeff = inputs['age']
 	new_latent_vector = latent_vector.copy()
