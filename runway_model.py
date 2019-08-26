@@ -15,7 +15,6 @@ import runway
 
 @runway.setup
 def setup(opts):
-	global generator
 	tflib.init_tf()
 	url = 'https://drive.google.com/uc?id=1MEGjdvVpUsu1jB4zrXZN7Y4kBBOzizDQ' # karras2019stylegan-ffhq-1024x1024.pkl
 	with dnnlib.util.open_url(url, cache_dir=config.cache_dir) as f:
@@ -24,11 +23,9 @@ def setup(opts):
 		# _D = Instantaneous snapshot of the discriminator. Mainly useful for resuming a previous training run.
 		# Gs = Long-term average of the generator. Yields higher-quality results than the instantaneous snapshot.
 	Gs.print_layers()
+	global generator
+	generator = Generator(Gs, batch_size=1, randomize_noise=False)
 	return Gs
-
-
-generator = Generator(model, batch_size=1, randomize_noise=False)
-
 
 def generate_image(generator, latent_vector):
 	latent_vector = latent_vector.reshape((1, 18, 512))
