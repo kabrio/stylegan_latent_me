@@ -40,7 +40,6 @@ def setup(opts):
 # 	generator = Generator(Gs, batch_size=1, randomize_noise=False)
 # 	return Gs
 
-
 def generate_image(generator, latent_vector):
 	latent_vector = latent_vector.reshape((1, 18, 512))
 	generator.set_dlatents(latent_vector)
@@ -49,7 +48,7 @@ def generate_image(generator, latent_vector):
 	return img.resize((512, 512))   
 
 generate_inputs = {
-	'age': runway.number(min=-20, max=20, default=6, step=0.1)
+	'age': runway.number(min=-6, max=6, default=6, step=0.1)
 }
 
 generate_outputs = {
@@ -62,9 +61,8 @@ def move_and_show(model, inputs):
 	age_direction = np.load('ffhq_dataset/latent_directions/age.npy')
 	direction = age_direction
 	# load latent representation
-	r1 = 'latent_representations/j_02.npy'
+	r1 = 'latent_representations/j_01.npy'
 	latent_vector = np.load(r1)
-	#latent_vector = np.load(inputs['latent_representations'])
 	# generator
 	coeff = inputs['age']
 	new_latent_vector = latent_vector.copy()
