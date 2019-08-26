@@ -9,7 +9,6 @@ import dnnlib.tflib as tflib
 import config
 from encoder.generator_model import Generator
 import runway
-# from runway.data_types import file, number, image
 import helpers
 
 import matplotlib.pyplot as plt
@@ -31,36 +30,28 @@ def setup():
 
 
 def generate_image(generator, latent_vector):
-	latent_vector = latent_vector.reshape((1, 18, 512))
-	generator.set_dlatents(latent_vector)
-	img_array = generator.generate_images()[0]
-	img = PIL.Image.fromarray(img_array, 'RGB')
-	return img.resize((512, 512))   
+    latent_vector = latent_vector.reshape((1, 18, 512))
+    generator.set_dlatents(latent_vector)
+    img_array = generator.generate_images()[0]
+    img = PIL.Image.fromarray(img_array, 'RGB')
+    return img.resize((512, 512))   
 
 generate_inputs = {
-<<<<<<< HEAD
-#	'representation': file(extension='.npy'),
-=======
->>>>>>> parent of 9768c1e... load npy from input
 	'age': runway.number(min=-6, max=6, default=6, step=0.1)
 }
 
 @runway.command('generat3', inputs=generate_inputs, outputs={'image': runway.image})
 def move_and_show(model, inputs):
+	generator = Generator(model, batch_size=1, randomize_noise=False)
 	coeff = inputs['age']
 	fig,ax = plt.subplots(1, 1, figsize=(15, 10), dpi=80)
 	# load latent representation
-<<<<<<< HEAD
-	# latent_vector = np.load(inputs['representation'])
-	latent_vector = np.load('latent_representations/j_01.npy')
-=======
 	r1 = 'latent_representations/j_01.npy'
 	latent_vector = np.load(r1)
->>>>>>> parent of 9768c1e... load npy from input
 	# Loading already learned latent directions
 	direction = np.load('ffhq_dataset/latent_directions/age.npy')     
 	# generator
-	generator = Generator(model, batch_size=1, randomize_noise=False)
+	# generator = Generator(model, batch_size=1, randomize_noise=False)
 	new_latent_vector = latent_vector.copy()
 	new_latent_vector[:8] = (latent_vector + coeff*direction)[:8]
 	ax.imshow(generate_image(generator, new_latent_vector))
