@@ -43,7 +43,7 @@ generate_outputs = {
 }
 
 @runway.command('generat3', inputs=generate_inputs, outputs=generate_outputs)
-def move_and_show(args):
+def move_and_show():
 	# load direction
 	age_direction = np.load('ffhq_dataset/latent_directions/age.npy')
 	direction = age_direction
@@ -51,7 +51,7 @@ def move_and_show(args):
 	r1 = 'latent_representations/j_01.npy'
 	latent_vector = np.load(r1)
 	# generator
-	coeff = inputs['age']
+	coeff = 5
 	new_latent_vector = latent_vector.copy()
 	new_latent_vector[:8] = (latent_vector + coeff*direction)[:8]
 	image = (generate_image(generator, new_latent_vector))
