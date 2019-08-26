@@ -49,8 +49,7 @@ def generate_image(generator, latent_vector):
 	return img.resize((512, 512))   
 
 generate_inputs = {
-	'age': runway.number(min=-20, max=20, default=6, step=0.1),
-	'latent_representations': runway.file(extension='.npy')
+	'age': runway.number(min=-20, max=20, default=6, step=0.1)
 }
 
 generate_outputs = {
@@ -63,8 +62,9 @@ def move_and_show(model, inputs):
 	age_direction = np.load('ffhq_dataset/latent_directions/age.npy')
 	direction = age_direction
 	# load latent representation
-	#r1 = 'latent_representations/j_01.npy'
-	latent_vector = np.load(inputs['latent_representations'])
+	r1 = 'latent_representations/j_02.npy'
+	latent_vector = np.load(r1)
+	#latent_vector = np.load(inputs['latent_representations'])
 	# generator
 	coeff = inputs['age']
 	new_latent_vector = latent_vector.copy()
