@@ -43,7 +43,7 @@ generate_outputs = {
 }
 
 @runway.command('generat3', inputs=generate_inputs, outputs=generate_outputs)
-def move_and_show():
+def move_and_show(model, args):
 	# load direction
 	age_direction = np.load('ffhq_dataset/latent_directions/age.npy')
 	direction = age_direction
