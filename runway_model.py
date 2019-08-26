@@ -15,17 +15,31 @@ import runway
 
 @runway.setup
 def setup(opts):
+	global Gs
 	tflib.init_tf()
-	url = 'https://drive.google.com/uc?id=1MEGjdvVpUsu1jB4zrXZN7Y4kBBOzizDQ' # karras2019stylegan-ffhq-1024x1024.pkl
-	with dnnlib.util.open_url(url, cache_dir=config.cache_dir) as f:
-		_G, _D, Gs = pickle.load(f)
-		# _G = Instantaneous snapshot of the generator. Mainly useful for resuming a previous training run.
-		# _D = Instantaneous snapshot of the discriminator. Mainly useful for resuming a previous training run.
-		# Gs = Long-term average of the generator. Yields higher-quality results than the instantaneous snapshot.
+	model = 'checkpoints/karras2019stylegan-ffhq-1024x1024.pkl'
+	print("open model %s" % model)
+	with open(model, 'rb') as file:
+		G, D, Gs = pickle.load(file)
 	Gs.print_layers()
 	global generator
 	generator = Generator(Gs, batch_size=1, randomize_noise=False)
 	return Gs
+
+
+# def setup(opts):
+# 	tflib.init_tf()
+# 	url = 'https://drive.google.com/uc?id=1MEGjdvVpUsu1jB4zrXZN7Y4kBBOzizDQ' # karras2019stylegan-ffhq-1024x1024.pkl
+# 	with dnnlib.util.open_url(url, cache_dir=config.cache_dir) as f:
+# 		_G, _D, Gs = pickle.load(f)
+# 		# _G = Instantaneous snapshot of the generator. Mainly useful for resuming a previous training run.
+# 		# _D = Instantaneous snapshot of the discriminator. Mainly useful for resuming a previous training run.
+# 		# Gs = Long-term average of the generator. Yields higher-quality results than the instantaneous snapshot.
+# 	Gs.print_layers()
+# 	global generator
+# 	generator = Generator(Gs, batch_size=1, randomize_noise=False)
+# 	return Gs
+
 
 def generate_image(generator, latent_vector):
 	latent_vector = latent_vector.reshape((1, 18, 512))
@@ -35,7 +49,8 @@ def generate_image(generator, latent_vector):
 	return img.resize((512, 512))   
 
 generate_inputs = {
-	'age': runway.number(min=-6, max=6, default=6, step=0.1)
+	'age': runway.number(min=-20, max=20, default=6, step=0.1),
+	'latent_representations': runway.file(extension='.npy')
 }
 
 generate_outputs = {
@@ -48,8 +63,8 @@ def move_and_show(model, inputs):
 	age_direction = np.load('ffhq_dataset/latent_directions/age.npy')
 	direction = age_direction
 	# load latent representation
-	r1 = 'latent_representations/j_01.npy'
-	latent_vector = np.load(r1)
+	#r1 = 'latent_representations/j_01.npy'
+	latent_vector = np.load(inputs['latent_representations'])
 	# generator
 	coeff = inputs['age']
 	new_latent_vector = latent_vector.copy()
