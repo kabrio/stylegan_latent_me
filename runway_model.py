@@ -15,7 +15,6 @@ import runway
 
 @runway.setup
 def setup(opts):
-	global Gs
 	tflib.init_tf()
 	model = 'checkpoints/karras2019stylegan-ffhq-1024x1024.pkl'
 	print("open model %s" % model)
@@ -24,8 +23,7 @@ def setup(opts):
 	Gs.print_layers()
 	global generator
 	generator = Generator(Gs, batch_size=1, randomize_noise=False)
-	return Gs
-
+	return generator
 
 # def setup(opts):
 # 	tflib.init_tf()
@@ -48,7 +46,7 @@ def generate_image(generator, latent_vector):
 	return img.resize((512, 512))   
 
 generate_inputs = {
-	'age': runway.number(min=-6, max=6, default=6, step=0.1)
+	'age': runway.number(min=-26, max=26, default=6, step=0.1)
 }
 
 generate_outputs = {
@@ -67,7 +65,7 @@ def move_and_show(model, inputs):
 	coeff = inputs['age']
 	new_latent_vector = latent_vector.copy()
 	new_latent_vector[:8] = (latent_vector + coeff*direction)[:8]
-	image = (generate_image(generator, new_latent_vector))
+	image = (generate_image(model, new_latent_vector))
 	#ax[i].set_title('Coeff: %0.1f' % coeff)
 	#plt.show()
 	return {'image': image}
