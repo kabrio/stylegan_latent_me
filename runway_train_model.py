@@ -50,6 +50,7 @@ def generate_image(generator, latent_vector):
 	return img.resize((512, 512))   
 
 generate_inputs = {
+	'portrait': runway.file(extension='.jpg'),
 	'age': runway.number(min=-26, max=26, default=6, step=0.1)
 }
 
