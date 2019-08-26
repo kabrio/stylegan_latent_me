@@ -9,7 +9,7 @@ import dnnlib.tflib as tflib
 import config
 from encoder.generator_model import Generator
 import runway
-from runway.data_types import file, number, image
+# from runway.data_types import file, number, image
 import helpers
 
 import matplotlib.pyplot as plt
@@ -39,7 +39,7 @@ def generate_image(generator, latent_vector):
 
 generate_inputs = {
 #	'representation': file(extension='.npy'),
-	'age': number(min=-6, max=6, default=6, step=0.1)
+	'age': runway.number(min=-6, max=6, default=6, step=0.1)
 }
 
 @runway.command('generat3', inputs=generate_inputs, outputs={'image': runway.image})
