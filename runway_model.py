@@ -52,7 +52,7 @@ generate_inputs = {
 }
 
 generate_outputs = {
-	'image': runway.image(width=512, height=512)
+	'image': runway.image(width=512, height=512),
 	'image 2': runway.image(width=512, height=512)
 }
 
