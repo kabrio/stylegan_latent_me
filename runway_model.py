@@ -23,7 +23,7 @@ def setup(opts):
 	Gs.print_layers()
 	global generator
 	generator = Generator(Gs, batch_size=1, randomize_noise=False)
-	return Gs
+	return generator
 
 # def setup(opts):
 # 	tflib.init_tf()
@@ -64,11 +64,11 @@ def move_and_show(model, inputs):
 	# load direction
 	age_direction = np.load('ffhq_dataset/latent_directions/age.npy')
 	direction = age_direction
-	# generator
+	# model = generator
 	coeff = inputs['age']/5.0
 	new_latent_vector = latent_vector.copy()
 	new_latent_vector[:8] = (latent_vector + coeff*direction)[:8]
-	image = (generate_image(generator, new_latent_vector))
+	image = (generate_image(model, new_latent_vector))
 	#ax[i].set_title('Coeff: %0.1f' % coeff)
 	#plt.show()
 	return {'image': image}
