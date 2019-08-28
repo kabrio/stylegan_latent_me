@@ -46,13 +46,14 @@ def generate_image(generator, latent_vector):
 	return img.resize((512, 512))   
 
 generate_inputs = {
-	'age': runway.number(min=-500, max=500, default=6, step=0.1)
+	'age': runway.number(min=-500, max=500, default=6, step=0.1),
 	'people_vector': runway.file(extension='.npy'), 
 	'age': runway.number(min=-26, max=26, default=6, step=0.1)
 }
 
 generate_outputs = {
 	'image': runway.image(width=512, height=512)
+	'image 2': runway.image(width=512, height=512)
 }
 
 @runway.command('generat3r', inputs=generate_inputs, outputs=generate_outputs)
