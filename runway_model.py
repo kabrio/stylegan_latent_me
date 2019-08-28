@@ -13,12 +13,8 @@ import matplotlib.pyplot as plt
 import runway
 
 
-@runway.setup(options={'people_vector': runway.file(extension='.npy'), 'checkpoint': runway.file(extension='.pkl')})
+@runway.setup(options={'checkpoint': runway.file(extension='.pkl')})
 def setup(opts):
-	# load latent representation
-	global latent_vector
-	p1 = opts['people_vector']
-	latent_vector = np.load(p1)
 	tflib.init_tf()
 	model = opts['checkpoint']
 	print("open model %s" % model)
@@ -51,6 +47,8 @@ def generate_image(generator, latent_vector):
 
 generate_inputs = {
 	'age': runway.number(min=-500, max=500, default=6, step=0.1)
+	'people_vector': runway.file(extension='.npy'), 
+	'age': runway.number(min=-26, max=26, default=6, step=0.1)
 }
 
 generate_outputs = {
@@ -59,6 +57,9 @@ generate_outputs = {
 
 @runway.command('generat3r', inputs=generate_inputs, outputs=generate_outputs)
 def move_and_show(model, inputs):
+	# load latent representation
+	p1 = inputs['people_vector']
+	latent_vector = np.load(p1)
 	# load direction
 	age_direction = np.load('ffhq_dataset/latent_directions/age.npy')
 	direction = age_direction
