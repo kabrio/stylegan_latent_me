@@ -53,7 +53,6 @@ generate_inputs = {
 
 generate_outputs = {
 	'image': runway.image(width=512, height=512),
-	'image 2': runway.image(width=512, height=512)
 }
 
 @runway.command('generat3r', inputs=generate_inputs, outputs=generate_outputs)
