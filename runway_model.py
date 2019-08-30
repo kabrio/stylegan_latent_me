@@ -13,7 +13,8 @@ import matplotlib.pyplot as plt
 import runway
 
 
-@runway.setup(options={'checkpoint': runway.file(extension='.pkl'), 'people_vector': runway.file(extension='.npy'),
+@runway.setup(options={'checkpoint': runway.file(extension='.pkl'), 
+	'people_vector': runway.file(extension='.npy'),
 	'people_vector2': runway.file(extension='.npy')})
 def setup(opts):
 	tflib.init_tf()
@@ -22,6 +23,13 @@ def setup(opts):
 	with open(model, 'rb') as file:
 		G, D, Gs = pickle.load(file)
 	Gs.print_layers()
+	# load latent representation
+	p1 = inputs['people_vector']
+	global latent_vector_1
+	latent_vector_1 = np.load(p1)
+	p2 = inputs['people_vector2']
+	global latent_vector_2
+	latent_vector_2 = np.load(p2)
 	global generator
 	generator = Generator(Gs, batch_size=1, randomize_noise=False)
 	return generator
@@ -55,12 +63,7 @@ generate_outputs = {
 }
 
 @runway.command('generat3r', inputs=generate_inputs, outputs=generate_outputs)
-def move_and_show(model, inputs):
-	# load latent representation
-	p1 = inputs['people_vector']
-	latent_vector_1 = np.load(p1)
-	p2 = inputs['people_vector2']
-	latent_vector_2 = np.load(p2)
+def move_and_show(model, inputs):	
 	latent_vector = (latent_vector_1 + latent_vector_2) * 2
 	# load direction
 	age_direction = np.load('ffhq_dataset/latent_directions/age.npy')
