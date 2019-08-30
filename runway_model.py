@@ -13,7 +13,8 @@ import matplotlib.pyplot as plt
 import runway
 
 
-@runway.setup(options={'checkpoint': runway.file(extension='.pkl')})
+@runway.setup(options={'checkpoint': runway.file(extension='.pkl'), 'people_vector': runway.file(extension='.npy'),
+	'people_vector2': runway.file(extension='.npy')})
 def setup(opts):
 	tflib.init_tf()
 	model = opts['checkpoint']
@@ -47,8 +48,6 @@ def generate_image(generator, latent_vector):
 
 generate_inputs = {
 	'age': runway.number(min=-500, max=500, default=6, step=0.1),
-	'people_vector': runway.file(extension='.npy'),
-	'people_vector2': runway.file(extension='.npy')
 }
 
 generate_outputs = {
