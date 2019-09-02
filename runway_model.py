@@ -25,8 +25,10 @@ def setup(opts):
 	Gs.print_layers()
 	# load latent representation
 	p1 = inputs['people_vector1']
+	global latent_vector_1
 	latent_vector_1 = np.load(p1)
 	p2 = inputs['people_vector2']
+	global latent_vector_2
 	latent_vector_2 = np.load(p2)
 	global generator
 	generator = Generator(Gs, batch_size=1, randomize_noise=False)
