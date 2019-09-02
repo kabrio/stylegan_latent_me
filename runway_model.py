@@ -14,7 +14,7 @@ import runway
 
 
 @runway.setup(options={'checkpoint': runway.file(extension='.pkl'), 
-	'people_vector': runway.file(extension='.npy'),
+	'people_vector1': runway.file(extension='.npy'),
 	'people_vector2': runway.file(extension='.npy')})
 def setup(opts):
 	tflib.init_tf()
@@ -24,11 +24,9 @@ def setup(opts):
 		G, D, Gs = pickle.load(file)
 	Gs.print_layers()
 	# load latent representation
-	p1 = inputs['people_vector']
-	global latent_vector_1
+	p1 = inputs['people_vector1']
 	latent_vector_1 = np.load(p1)
 	p2 = inputs['people_vector2']
-	global latent_vector_2
 	latent_vector_2 = np.load(p2)
 	global generator
 	generator = Generator(Gs, batch_size=1, randomize_noise=False)
@@ -55,7 +53,7 @@ def generate_image(generator, latent_vector):
 	return img.resize((512, 512))   
 
 generate_inputs = {
-	'age': runway.number(min=-500, max=500, default=6, step=0.1),
+	'age': runway.number(min=0, max=3, default=6, step=0.1),
 }
 
 generate_outputs = {
@@ -64,15 +62,17 @@ generate_outputs = {
 
 @runway.command('generat3r', inputs=generate_inputs, outputs=generate_outputs)
 def move_and_show(model, inputs):	
-	latent_vector = (latent_vector_1 + latent_vector_2) * 2
+	global latent_vector_1
+	global latent_vector_2
+	latent_vector = (latent_vector_1 + latent_vector_2) / 2
 	# load direction
 	age_direction = np.load('ffhq_dataset/latent_directions/age.npy')
 	direction = age_direction
 	# model = generator
-	coeff = inputs['age']/5.0
+	coeff = 7 - inputs['age']
 	new_latent_vector = latent_vector.copy()
 	new_latent_vector[:8] = (latent_vector + coeff*direction)[:8]
-	image = (generate_image(model, new_latent_vector))
+	image = generate_image(model, new_latent_vector)
 	#ax[i].set_title('Coeff: %0.1f' % coeff)
 	#plt.show()
 	return {'image': image}
