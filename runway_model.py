@@ -58,7 +58,7 @@ def generate_image(generator, latent_vector):
 	return img.resize((512, 512))   
 
 generate_inputs = {
-	'age': runway.number(min=0, max=3, default=6, step=0.1),
+	'age': runway.number(min=0, max=6, default=3, step=0.1),
 }
 
 generate_outputs = {
