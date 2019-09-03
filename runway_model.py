@@ -12,11 +12,14 @@ from encoder.generator_model import Generator
 import matplotlib.pyplot as plt
 import runway
 
+latent_vector_1=0
+latent_vector_2=0
 
 @runway.setup(options={'checkpoint': runway.file(extension='.pkl'), 
 	'people_vector1': runway.file(extension='.npy'),
 	'people_vector2': runway.file(extension='.npy')})
 def setup(opts):
+	global Gs
 	tflib.init_tf()
 	model = opts['checkpoint']
 	print("open model %s" % model)
@@ -62,7 +65,7 @@ generate_outputs = {
 	'image': runway.image(width=512, height=512),
 }
 
-@runway.command('generat3r', inputs=generate_inputs, outputs=generate_outputs)
+@runway.command('babey generator', inputs=generate_inputs, outputs=generate_outputs)
 def move_and_show(model, inputs):	
 	global latent_vector_1
 	global latent_vector_2
